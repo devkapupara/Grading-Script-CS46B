@@ -6,13 +6,13 @@ Grading Script that compiles and runs student submissions, uses the Grader Bot t
 ##### Instructions:
 1) You need to have python 3.x to run this. I used 3.7 when developing it, so if some error occurs, please update your python setup to 3.7.
 
-2) The first thing you should do is generate a Token from Canvas. To do this, click on your Account in the top-left corner, choose Settings -> Approved Integrations -> New Token. Give any name you want and leave the expire part empty. Note down the token it generates.YOU WON'T BE ABLE TO COPY IT LATER. Paste this token in the access_token variable in the script.
+2) The first thing you should do is generate a Token from Canvas. To do this, click on your Account in the top-left corner, choose Settings -> Under Approved Integrations, click on New Token. Give any name you want and leave the expire part empty. Note down the token it generates. **You won't be able to copy this token once you close the window.**. Paste this token in the access_token variable in the script.
 
-2) Download the submissions from canvas and note down its path. If you are on Mac, the easiest way to get the path is to left-click on the folder, press Command-C, open terminal, and press Command-V. It should paste the path of your submission folder.
+2) Download the submissions from canvas, unzip it and note down its path. If you are on Mac, the easiest way to get the path is to left-click on the folder, press Command-C, open terminal, and press Command-V. It should paste the path of your submission folder.
 
-3) After copying the path, open up the grading.py file and paste that path in a variable base_dir. 
+3) After copying the path, open up the grading.py file and paste that path in the variable base_dir. 
 
-4) Fire up the terminal, navigate to where you saved the grading script and type the following command: python3 grading.py
+4) Fire up the terminal, navigate to where you saved the grading script and type the following command: ```python3 grading.py```
 
 5) The second will ask you if you want to clean up the folder after the script ends, which basically cleans all the extracted folder and .class, .java files. Next one will ask you the package name, which is very essential. Last one will ask you for the class name containing the main function, which will basically be a tester file provided by Dr. Heller to test your code.
 
