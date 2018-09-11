@@ -1,9 +1,9 @@
 # Grading-Script-CS46B
 Grading Script that compiles and runs student submissions, uses the Grader Bot to get the scores, builds comments and uploads them back to the Canvas.
 
-#### NOTE: THIS SCRIPT WON'T WORK ON WINDOWS DUE TO UNAVAILIBILITY OF BASH SHELL COMMANDS
+**NOTE: THIS SCRIPT WON'T WORK ON WINDOWS DUE TO UNAVAILIBILITY OF BASH SHELL COMMANDS**
 
-##### Instructions:
+#### Instructions:
 1) You need to have python 3.x to run this. I used 3.7 when developing it, so if some error occurs, please update your python setup to 3.7.
 
 2) The first thing you should do is generate a Token from Canvas. To do this, click on your Account in the top-left corner, choose Settings -> Under Approved Integrations, click on New Token. Give any name you want and leave the expire part empty. Note down the token it generates. **You won't be able to copy this token once you close the window.**. Paste this token in the access_token variable in the script.
