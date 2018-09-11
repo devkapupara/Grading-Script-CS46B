@@ -1,7 +1,6 @@
 # Create by Dev Kapupara. Please do not distribute.
 # Script made for CS46B class managed by Dr. Philip Heller
 # For any bugs or clarification, email me at devkapupara@gmail.com with subject CS46B Script.py
-# Made it because I was lazy to unzip each student's jar file and run it from the terminal.
 
 import subprocess as sp
 import os
@@ -10,23 +9,25 @@ import shutil
 import re
 import requests
 
-access_token = '12~RxG1tLwuimVxW2XRoqOIU1SvJWgzygwQ6629Qg4Fyb998Ou40jvD2wQzqh4VJNFC'
+access_token = ''
 course_id = 1271170
 header = {'Authorization': 'Bearer ' + access_token}
 base = 'https://sjsu.instructure.com/api/v1/courses/'
 
 # base_dir is your downloaded submissions folder. Change it accordingly if paths keep changing.
-base_dir = '/Users/devkapupara/Desktop/submissions'
+base_dir = ''
 
 grades_dict = {}  # id:(score, comments)
 roster = {}       # id:name
 
 
 def open_url(url):
+    """Opens up connection to get the data."""
     return requests.get(url, headers=header).json()
 
 
 def fetch_roster():
+    """Gets the roster for your course"""
     get_students_link = base + '{}/students'.format(course_id)
     user_list = open_url(get_students_link)
     for user in user_list:
@@ -34,7 +35,7 @@ def fetch_roster():
 
 
 def grade_submissions():
-
+    """Grades student submissions in the directory specified."""
     script_created_objects = []                                 # For cleanup purposes after running the script.
 
     cleanup = True if input("Clean up after extracting and running programs? [Y/N]: ").lower() == 'y' else False
