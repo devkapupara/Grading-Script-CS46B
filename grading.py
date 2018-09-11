@@ -9,21 +9,21 @@ import shutil
 import re
 import requests
 
-access_token = ''
+access_token = '12~RxG1tLwuimVxW2XRoqOIU1SvJWgzygwQ6629Qg4Fyb998Ou40jvD2wQzqh4VJNFC'
 course_id = 1271170
 header = {'Authorization': 'Bearer ' + access_token}
 base = 'https://sjsu.instructure.com/api/v1/courses/'
 
 # base_dir is your downloaded submissions folder. Change it accordingly if paths keep changing.
-base_dir = ''
+base_dir = '/Users/devkapupara/Desktop/submissions'
 
 grades_dict = {}  # id:(score, comments)
 roster = {}       # id:name
 
 
-def open_url(url):
+def open_url(url, params={}):
     """Opens up connection to get the data."""
-    return requests.get(url, headers=header).json()
+    return requests.get(url, data=params, headers=header).json()
 
 
 def fetch_roster():
@@ -46,9 +46,16 @@ def grade_submissions():
 
     detailed_grades = open('detailed_grades.txt', 'w')        # Setup grades.txt file
 
+    late_ids = set()
+
     # SMH! Some students will submit .zip even if instructions ask for .jar. So an additional check for them
     for file in glob.glob('*.zip'):
-        user_id = file.split('_')[1]
+        split_contents = file.split('_')
+        if split_contents[1] == 'late':
+            user_id = split_contents[2]
+            late_ids.add(user_id)
+        else:
+            user_id = split_contents[1]
         sp.run('unzip -p {} > x_{}_hw.jar'.format(file, user_id), shell=True)
         script_created_objects.append(os.path.join(base_dir, 'x_{}_hw.jar'.format(user_id)))
 
@@ -56,7 +63,12 @@ def grade_submissions():
     separator = '-'*20
     # Now that we have all the jar files, lets start working.
     for file in glob.glob('*.jar'):
-        user_id = file.split('_')[1]                # Get the student name
+        split_contents = file.split('_')
+        if split_contents[1] == 'late':
+            user_id = split_contents[2]
+            late_ids.add(user_id)
+        else:
+            user_id = split_contents[1]
         print(roster[user_id])                              # Print it to look nice.
         if user_id not in os.listdir(os.getcwd()):  # If folder created previously, which SHOULD NOT be the case, don't create it.
             script_created_objects.append(os.path.join(base_dir,user_id))
@@ -76,7 +88,7 @@ def grade_submissions():
             # grader bot output or if a compile/runtime error occur, we use the JVM error output as comments.
             result = list(filter(lambda x: x != '', sp.run('java {}.{}'.format(package_name,main_file_name), shell=True,
                                         stdout=sp.PIPE, stderr=sp.PIPE, check=True).stdout.decode('ascii').split('\n')))
-            comments = '\n'.join(result[:-1])
+            comments = '\n'.join(result[:-1]) + ('\nLATE SUBMISSION' if user_id in late_ids else '')
             points = re.findall('\d+', result[-1])[0]
             grades_dict[user_id] = (points, comments)
         except sp.CalledProcessError as e:
@@ -89,7 +101,7 @@ def grade_submissions():
         if uid not in grades_dict:
             grades_dict[uid] = (0, "No submission made.")
         detailed_grades.write("Name: {}\nScore:{}\nComments:\n{}\n{}\n".format(roster[uid], grades_dict[uid][0],
-                                                                               grades_dict[uid][1], separator))
+                                grades_dict[uid][1], separator))
 
     if cleanup:                 # If user wanted cleanup, then only shall I clean. Some people like messy stuff.
         for path in script_created_objects:
@@ -98,19 +110,14 @@ def grade_submissions():
             else:
                 os.remove(path)
     detailed_grades.close()              # Why are you still open? Time to close bud, our work is done.
-    print("All done here! Please check the grades.txt and detailed_grades.txt file for the scores.")
+    print("All done here! Please check the detailed_grades.txt file for the scores.")
 
 
 def get_assignment_id():
     """Fetches the assignment id from canvas. Needed for uploading grades."""
     name = "Assignment " + input("Enter assignment number: ")
-    get_assignment = base + '{}/assignments'.format(course_id)
-    assignment_details = open_url(get_assignment)
-    aid = None
-    for assignment_dict in assignment_details:
-        if assignment_dict['name'] == name:
-            aid = assignment_dict['id']
-    return aid
+    assignment_id = open_url(base + '{}/assignments'.format(course_id), {'search_term': name})[0]['id']
+    return str(assignment_id)
 
 
 def upload_grades():
