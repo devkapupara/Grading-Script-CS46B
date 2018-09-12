@@ -60,7 +60,7 @@ def grade_submissions():
         sp.run('unzip -p {} > x_{}_hw.jar'.format(file, user_id), shell=True)
         script_created_objects.append(os.path.join(base_dir, 'x_{}_hw.jar'.format(user_id)))
 
-    print("Following students found...")
+    print("Grading the following students...")
     separator = '-'*20
     # Now that we have all the jar files, lets start working.
     for file in glob.glob('*.jar'):
