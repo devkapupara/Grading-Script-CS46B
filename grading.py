@@ -49,6 +49,7 @@ def grade_submissions():
     late_ids = set()
 
     # SMH! Some students will submit .zip even if instructions ask for .jar. So an additional check for them
+    # Comment this block out if you know that the submissions will be a jar file.
     for file in glob.glob('*.zip'):
         split_contents = file.split('_')
         if split_contents[1] == 'late':

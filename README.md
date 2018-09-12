@@ -1,7 +1,7 @@
 # Grading-Script-CS46B
 Grading Script that compiles and runs student submissions, uses the Grader Bot to get the scores, builds comments and uploads them back to the Canvas.
 
-**NOTE: This script won't work on Windows due to unavailibility of Bash Shell commands.**
+**NOTE: This script won't work on Windows due to unavailability of one specific command - unzip -p. You can get it to work on it by removing out the block mentioned in the script. It is safe because it was just a precaution implemented for my section where student were not following instructions and submitting .zip files. If you are sure that your section will always submit .jar files, you can remove it. If you are on a Mac, you should be fine either way.**
 
 #### Instructions:
 1) You need to have python 3.x to run this. I used 3.7 when developing it, so if some error occurs, please update your python setup to 3.7.
@@ -10,7 +10,7 @@ Grading Script that compiles and runs student submissions, uses the Grader Bot t
 
 2) Download the submissions from canvas, unzip it and note down its path. If you are on Mac, the easiest way to get the path is to left-click on the folder, press Command-C, open terminal, and press Command-V. It should paste the path of your submission folder.
 
-3) After copying the path, open up the grading.py file and paste that path in the variable base_dir. 
+3) After copying the path, open up the grading.py file and paste that path in the variable base_dir.
 
 4) Fire up the terminal, navigate to where you saved the grading script and type the following command: ```python3 grading.py```
 
